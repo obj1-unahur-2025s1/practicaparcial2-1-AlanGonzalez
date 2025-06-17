@@ -1,9 +1,70 @@
-import example.pepita
+import personajes.*
+import roles.*
+import localidades.*
+
 
 describe "group of tests for pepita" {
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
+  const humano1 = new Humanos(inteligencia = 60, rol = cazador, fuerza = 300)
+  const humano2 = new Humanos(inteligencia = 60, rol = guerrero, fuerza = 300)
+  const humano3 = new Humanos(inteligencia = 60, rol = brujo, fuerza = 300)
+  const humano4 = new Humanos(inteligencia = 60, rol = guerrero, fuerza = 300)
+  const orco1 = new Orcos(rol = guerrero, inteligencia = 0, fuerza = 500)
+  const orco2 = new Orcos(rol = brujo, inteligencia = 0, fuerza = 500)
+  const orco3 = new Orcos(rol = brujo, inteligencia = 0, fuerza = 500)
+  const orco4 = new Orcos(rol = brujo, inteligencia = 0, fuerza = 500)
+  const ejercitos = new Ejercitos(ejercito = [orco1, orco2, orco3, orco4])
+  const aldea = new Aldeas(habitantes = [humano1, humano2, humano3, humano4], cantidadHabitantes = 100, cantidadMaximaHabitantes = 300)
+  const ciudad = new Ciudades(habitantes = [humano1, humano2, humano3], cantidadHabitantes = 100)
+  const mascota = new Mascota(tieneGarras = true, fuerza = 30, edad = 50)
+  
+
+  test "la aldea cuenta con 4 habitantes" {
+    assert.equals(4, aldea.cantidadHabitantes())
+  }
+
+  test "el ejercito cuenta con 4 orcos" {
+    assert.equals(4, ejercitos.ejercito().size())
+  }
+
+  test "si tengo un humano con mascota su potencial ofensivo es 3060" {
+    cazador.domar(mascota)
+    assert.equals(3060, humano1.potencialOfensivo())
+  }
+
+  test "si tengo un humano con mascota sin garras su potencial ofensivo es" {
+    const mascota1 = new Mascota(tieneGarras = false, fuerza = 30, edad = 50)
+    cazador.domar(mascota1)
+    assert.equals(3100, humano2.potencialOfensivo())
+  }
+
+  test "los orcos no son inteligentes" {
+    assert.notThat(orco1.esInteligencia())
+    assert.notThat(orco3.esInteligencia())
+    assert.notThat(orco4.esInteligencia())
+  }
+
+  test "humano 3 es inteligente" {
+    assert.that(humano3.esInteligencia())
+  }
+
+  test "orco es groso" {
+    assert.that(orco2.grosos())
+  }
+
+  test "humano 4tien inteligencia 60" {
+    assert.equals(60, humano4.inteligencia())
+  }
+
+  test "la ciudad tiene 3 habitantes" {
+    assert.equals(3, ciudad.cantidadHabitantes())
+  }
+
+  test "si un ejercito de orcos ataca la aldea la toma y se asentuan" {
+    cazador.domar(mascota)
+    aldea.potencialOfensivoHabitantes()
+    ejercitos.lucharContraLocalidad(aldea)
+    assert.equals([orco1,orco2,orco3,orco4], aldea.habitantes())
   }
 
 }
